@@ -1,0 +1,50 @@
+/// Region / geography dimension
+table DimRegion
+	lineageTag: 8bff70a8-e9c1-4a35-b5ee-90ff26b5b18b
+
+	column RegionKey
+		isHidden
+		lineageTag: b1bf7528-ed09-49fd-a30d-5393a99dbace
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [RegionKey]
+
+	column Region
+		lineageTag: 0a7fb23f-4f0d-4800-9bda-c376e21126dd
+		isNameInferred
+		sourceColumn: [Region]
+
+	column Country
+		lineageTag: d5c718d9-459e-4a94-b1cd-9abcc95b4c77
+		dataCategory: Country
+		isNameInferred
+		sourceColumn: [Country]
+
+	column City
+		lineageTag: b6070cd3-b87a-4b61-bf03-5f3f6aae3070
+		dataCategory: City
+		isNameInferred
+		sourceColumn: [City]
+
+	partition DimRegion = calculated
+		mode: import
+		source =
+				DATATABLE(
+				    "RegionKey", INTEGER,
+				    "Region", STRING,
+				    "Country", STRING,
+				    "City", STRING,
+				    {
+				        {1, "North America", "United States", "New York"},
+				        {2, "North America", "United States", "San Francisco"},
+				        {3, "North America", "Canada", "Toronto"},
+				        {4, "Europe", "United Kingdom", "London"},
+				        {5, "Europe", "Germany", "Berlin"},
+				        {6, "Europe", "France", "Paris"},
+				        {7, "Asia Pacific", "India", "Mumbai"},
+				        {8, "Asia Pacific", "Japan", "Tokyo"},
+				        {9, "Asia Pacific", "Australia", "Sydney"},
+				        {10, "Asia Pacific", "Singapore", "Singapore"}
+				    }
+				)
+

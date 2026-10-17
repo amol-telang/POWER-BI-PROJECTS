@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Power BI AI Report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "500192a7-9e60-495d-929b-ce90734533b8"
+  }
+}

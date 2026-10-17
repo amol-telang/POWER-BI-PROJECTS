@@ -1,0 +1,120 @@
+/// Date dimension 2021-01-01 to 2026-12-31 (full calendar years for time intelligence)
+table DimDate
+	lineageTag: f4c1246b-769c-4390-ab4d-f0ea25fd3ec6
+	dataCategory: Time
+
+	column Date
+		isUnique
+		isKey
+		formatString: dd-mmm-yyyy
+		lineageTag: 57e610a6-db50-49e7-bd46-d65b12bb9f46
+		isNameInferred
+		sourceColumn: [Date]
+
+	column Year
+		lineageTag: 11ccc179-f68c-4710-93d5-39fc4a911e73
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+
+	column 'Quarter Number'
+		isHidden
+		lineageTag: 08b7cc9a-0950-4848-a68b-2546aeee2d37
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter Number]
+
+	column Quarter
+		lineageTag: e82f6a4e-92e3-4afb-a79a-e9eaad186acd
+		isNameInferred
+		sourceColumn: [Quarter]
+		sortByColumn: 'Quarter Number'
+
+	column 'Year Quarter'
+		lineageTag: 12f783ee-4df3-473b-9e85-1920f0b3f590
+		isNameInferred
+		sourceColumn: [Year Quarter]
+
+	column 'Month Number'
+		isHidden
+		lineageTag: 2017b693-b388-47d9-b679-6b4b9220164c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month Number]
+
+	column Month
+		lineageTag: 7c67a342-160a-465a-9ba5-84a362c4e701
+		isNameInferred
+		sourceColumn: [Month]
+		sortByColumn: 'Month Number'
+
+	column 'Month Name'
+		lineageTag: 858be058-163d-4555-9c84-e85bc3255b15
+		isNameInferred
+		sourceColumn: [Month Name]
+		sortByColumn: 'Month Number'
+
+	column 'Year Month'
+		lineageTag: 0acc5d05-94fc-4144-8ca0-b059691e57c9
+		isNameInferred
+		sourceColumn: [Year Month]
+		sortByColumn: 'Year Month Number'
+
+	column 'Year Month Number'
+		isHidden
+		lineageTag: 30fd3bfc-dc3c-45f4-b8be-26274a8376b6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year Month Number]
+
+	column 'Week of Year'
+		lineageTag: 685331b9-bc86-4bdf-b917-4ca18144a936
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Week of Year]
+
+	column 'Day of Month'
+		lineageTag: dbc38f9d-293f-402a-b94c-cba31de37a26
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Day of Month]
+
+	column 'Day of Week Number'
+		isHidden
+		lineageTag: 1b83734c-8559-438e-be77-c7953e670188
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Day of Week Number]
+
+	column 'Day of Week'
+		lineageTag: 230074c3-15f8-4c49-be57-9f9f673879c8
+		isNameInferred
+		sourceColumn: [Day of Week]
+		sortByColumn: 'Day of Week Number'
+
+	column 'Is Weekend'
+		lineageTag: 6d95e0be-bdf2-4f75-857d-711ff34d74d9
+		isNameInferred
+		sourceColumn: [Is Weekend]
+
+	partition DimDate = calculated
+		mode: import
+		source =
+				ADDCOLUMNS(
+				    CALENDAR(DATE(2021,1,1), DATE(2026,12,31)),
+				    "Year", YEAR([Date]),
+				    "Quarter Number", ROUNDUP(MONTH([Date]) / 3, 0),
+				    "Quarter", "Q" & ROUNDUP(MONTH([Date]) / 3, 0),
+				    "Year Quarter", YEAR([Date]) & "-Q" & ROUNDUP(MONTH([Date]) / 3, 0),
+				    "Month Number", MONTH([Date]),
+				    "Month", FORMAT([Date], "mmm"),
+				    "Month Name", FORMAT([Date], "mmmm"),
+				    "Year Month", FORMAT([Date], "yyyy-mm"),
+				    "Year Month Number", YEAR([Date]) * 100 + MONTH([Date]),
+				    "Week of Year", WEEKNUM([Date], 2),
+				    "Day of Month", DAY([Date]),
+				    "Day of Week Number", WEEKDAY([Date], 2),
+				    "Day of Week", FORMAT([Date], "ddd"),
+				    "Is Weekend", IF(WEEKDAY([Date], 2) >= 6, "Weekend", "Weekday")
+				)
+

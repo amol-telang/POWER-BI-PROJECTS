@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Power BI AI Report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "1e62e009-b424-4847-b9a7-c5124a660905"
+  }
+}

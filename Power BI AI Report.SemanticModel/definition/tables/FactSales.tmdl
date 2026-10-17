@@ -1,0 +1,260 @@
+/// Sales fact table - ~9,000 sample order lines from 2021-01-01 to 2026-10-15 with a growth trend
+table FactSales
+	lineageTag: a718d23c-a74e-4353-a496-6b21c9abe626
+
+	measure 'Total Sales' = SUM(FactSales[Sales Amount])
+		formatString: #,0
+		displayFolder: 1 Base
+		lineageTag: a9981495-36f4-42a0-aea3-db3f639f3693
+
+	measure 'Total Cost' = SUM(FactSales[Cost Amount])
+		formatString: #,0
+		displayFolder: 1 Base
+		lineageTag: 6cb4f555-0e64-447f-95a6-65f20fc17242
+
+	measure 'Total Profit' = [Total Sales] - [Total Cost]
+		formatString: #,0
+		displayFolder: 1 Base
+		lineageTag: 646a7463-1492-4ef4-9676-8ee4f94877ac
+
+	measure 'Profit Margin %' = DIVIDE([Total Profit], [Total Sales])
+		formatString: 0.0%
+		displayFolder: 1 Base
+		lineageTag: dd48f05e-9970-40a0-8100-55f39bb04b05
+
+	measure 'Total Quantity' = SUM(FactSales[Quantity])
+		formatString: #,0
+		displayFolder: 1 Base
+		lineageTag: 346166a6-8b27-4196-8289-b0c7be57de06
+
+	measure 'Order Lines' = COUNTROWS(FactSales)
+		formatString: #,0
+		displayFolder: 1 Base
+		lineageTag: c0c71822-8176-4029-828b-dcafc8e08988
+
+	measure 'Avg Order Value' = DIVIDE([Total Sales], [Order Lines])
+		formatString: #,0.00
+		displayFolder: 1 Base
+		lineageTag: 1e509674-1fea-4395-9efe-4c5b4c93db90
+
+	measure 'Customer Count' = DISTINCTCOUNT(FactSales[CustomerKey])
+		formatString: #,0
+		displayFolder: 1 Base
+		lineageTag: f40533f3-95ef-4362-9091-29635e60f65f
+
+	measure 'Sales YTD' = IF(NOT ISBLANK([Total Sales]), TOTALYTD([Total Sales], DimDate[Date]))
+		formatString: #,0
+		displayFolder: 2 To Date
+		lineageTag: d0960c61-139a-417c-920f-4724ba5c516a
+
+	measure 'Sales QTD' = IF(NOT ISBLANK([Total Sales]), TOTALQTD([Total Sales], DimDate[Date]))
+		formatString: #,0
+		displayFolder: 2 To Date
+		lineageTag: 6f834e23-fec7-49c5-992d-2eb732ff2359
+
+	measure 'Sales MTD' = IF(NOT ISBLANK([Total Sales]), TOTALMTD([Total Sales], DimDate[Date]))
+		formatString: #,0
+		displayFolder: 2 To Date
+		lineageTag: 809ffb49-e87e-4d8f-8d3b-e04fa0f15f79
+
+	measure 'Sales PY' = IF(NOT ISBLANK([Total Sales]), CALCULATE([Total Sales], SAMEPERIODLASTYEAR(DimDate[Date])))
+		formatString: #,0
+		displayFolder: 3 Prior Year
+		lineageTag: 38eaf847-e4c8-4e8d-b089-9675e30c72ee
+
+	measure 'Sales YoY' = IF(NOT ISBLANK([Sales PY]), [Total Sales] - [Sales PY])
+		formatString: #,0;-#,0
+		displayFolder: 3 Prior Year
+		lineageTag: d879ba0a-da84-40b5-af6f-733cbb8bf82d
+
+	measure 'Sales YoY %' = DIVIDE([Sales YoY], [Sales PY])
+		formatString: 0.0%;-0.0%
+		displayFolder: 3 Prior Year
+		lineageTag: 8ee96067-86bd-4d7e-b2f1-c195cae52917
+
+	measure 'Sales YTD PY' = IF(NOT ISBLANK([Total Sales]), CALCULATE([Sales YTD], SAMEPERIODLASTYEAR(DimDate[Date])))
+		formatString: #,0
+		displayFolder: 3 Prior Year
+		lineageTag: 3839d5eb-b672-486c-ac1e-d958d87eaffc
+
+	measure 'Sales YTD YoY %' = DIVIDE([Sales YTD] - [Sales YTD PY], [Sales YTD PY])
+		formatString: 0.0%;-0.0%
+		displayFolder: 3 Prior Year
+		lineageTag: 02853f95-5b19-42f1-b336-36ad42dd17a0
+
+	measure 'Sales PM' = IF(NOT ISBLANK([Total Sales]), CALCULATE([Total Sales], DATEADD(DimDate[Date], -1, MONTH)))
+		formatString: #,0
+		displayFolder: 4 Prior Period
+		lineageTag: 67fa0a89-9e91-4b18-9a60-9b22c905b3fb
+
+	measure 'Sales MoM' = IF(NOT ISBLANK([Sales PM]), [Total Sales] - [Sales PM])
+		formatString: #,0;-#,0
+		displayFolder: 4 Prior Period
+		lineageTag: 96704688-e70b-4a13-9d45-abd09a7ce692
+
+	measure 'Sales MoM %' = DIVIDE([Sales MoM], [Sales PM])
+		formatString: 0.0%;-0.0%
+		displayFolder: 4 Prior Period
+		lineageTag: 65667506-e779-4bcd-8338-b809a1394d2e
+
+	measure 'Sales PQ' = IF(NOT ISBLANK([Total Sales]), CALCULATE([Total Sales], DATEADD(DimDate[Date], -1, QUARTER)))
+		formatString: #,0
+		displayFolder: 4 Prior Period
+		lineageTag: 0fe1429a-335f-4e9b-9704-8ae993a57e09
+
+	measure 'Sales QoQ %' = DIVIDE([Total Sales] - [Sales PQ], [Sales PQ])
+		formatString: 0.0%;-0.0%
+		displayFolder: 4 Prior Period
+		lineageTag: 411721e5-43a2-4378-936b-1cacf989a1ec
+
+	measure 'Sales Rolling 3M' = IF(NOT ISBLANK([Total Sales]), CALCULATE([Total Sales], DATESINPERIOD(DimDate[Date], MAX(DimDate[Date]), -3, MONTH)))
+		formatString: #,0
+		displayFolder: 5 Rolling
+		lineageTag: 0e42b538-981e-4f47-915e-fe02677078e2
+
+	measure 'Sales Rolling 12M' = IF(NOT ISBLANK([Total Sales]), CALCULATE([Total Sales], DATESINPERIOD(DimDate[Date], MAX(DimDate[Date]), -12, MONTH)))
+		formatString: #,0
+		displayFolder: 5 Rolling
+		lineageTag: 3da97bf6-d275-48d8-be45-b68c0b1d95d2
+
+	measure 'Sales by Ship Date' = CALCULATE([Total Sales], USERELATIONSHIP(FactSales[ShipDate], DimDate[Date]))
+		formatString: #,0
+		displayFolder: 6 Role-Playing
+		lineageTag: 8f126cd5-e0dd-4e44-9633-c296f2a71031
+
+	column SalesKey
+		isHidden
+		lineageTag: aa81367d-0a13-4b9e-92ba-f962695a806c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SalesKey]
+
+	column OrderDate
+		isHidden
+		formatString: dd-mmm-yyyy
+		lineageTag: 166591b0-fa12-4e18-862e-f52c3a09baf5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [OrderDate]
+
+	column ShipDate
+		isHidden
+		formatString: dd-mmm-yyyy
+		lineageTag: 4c0b6e2a-4193-469b-9f51-57a0dda158b9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ShipDate]
+
+	column ProductKey
+		isHidden
+		lineageTag: 040ecd09-823d-4357-8005-b4713a730cf3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ProductKey]
+
+	column CustomerKey
+		isHidden
+		lineageTag: c1d64bed-6dcb-4ef1-8a0a-da8f957551af
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CustomerKey]
+
+	column RegionKey
+		isHidden
+		lineageTag: 79c0d283-aca7-4141-861d-3c21df8f43ac
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [RegionKey]
+
+	column Quantity
+		isHidden
+		lineageTag: 35378c18-8b1f-42d6-9b3b-b1b7d3d8ea50
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quantity]
+
+	column 'Unit Price'
+		isHidden
+		formatString: #,0.00
+		lineageTag: 3765611f-abc8-4e08-aadd-7744875c876f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Unit Price]
+
+	column 'Unit Cost'
+		isHidden
+		formatString: #,0.00
+		lineageTag: 3a8a77fc-548b-438d-8d08-572ae83e9ee0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Unit Cost]
+
+	column 'Discount Pct'
+		formatString: 0%
+		lineageTag: 63a14604-4ffd-4df6-8dd3-4c1b3b331801
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Discount Pct]
+
+	column 'Sales Amount'
+		isHidden
+		formatString: #,0.00
+		lineageTag: e26ec234-f284-4719-849b-6b070921b74f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Sales Amount]
+
+	column 'Cost Amount'
+		isHidden
+		formatString: #,0.00
+		lineageTag: 450fe319-a6d6-4a3e-8567-a425289f47d6
+		summarizeBy: none
+		sourceColumn: [Total Cost]
+
+	partition FactSales = calculated
+		mode: import
+		source =
+				VAR _Start = DATE(2021,1,1)
+				VAR _End = DATE(2026,10,15)
+				VAR _Days = DATEDIFF(_Start, _End, DAY) + 1
+				VAR _Base =
+				    ADDCOLUMNS(
+				        GENERATESERIES(1, 9000, 1),
+				        "@h1", MOD([Value] * [Value] * 7919 + [Value] * 104729 + 12345, 1000003),
+				        "@h2", MOD([Value] * [Value] * 104729 + [Value] * 7919 + 777, 999983),
+				        "@h3", MOD([Value] * [Value] * 15485863 + [Value] * 32452843 + 4242, 999979)
+				    )
+				VAR _Keys =
+				    ADDCOLUMNS(
+				        _Base,
+				        "@OrderDate", _Start + INT(_Days * POWER([@h1] / 1000003, 0.75)),
+				        "@ProductKey", 1 + MOD([@h2], 12),
+				        "@CustomerKey", 1 + MOD(INT([@h3] / 7), 20),
+				        "@RegionKey", 1 + MOD(INT([@h2] / 13), 10),
+				        "@Quantity", 1 + MOD(INT([@h3] / 101), 8),
+				        "@Discount", SWITCH(MOD(INT([@h1] / 29), 5), 0, 0, 1, 0, 2, 0.05, 3, 0.1, 0.15),
+				        "@ShipLag", 2 + MOD(INT([@h2] / 31), 5)
+				    )
+				VAR _Priced =
+				    ADDCOLUMNS(
+				        _Keys,
+				        "@UnitPrice", LOOKUPVALUE(DimProduct[Unit Price], DimProduct[ProductKey], [@ProductKey]),
+				        "@UnitCost", LOOKUPVALUE(DimProduct[Unit Cost], DimProduct[ProductKey], [@ProductKey])
+				    )
+				RETURN
+				    SELECTCOLUMNS(
+				        _Priced,
+				        "SalesKey", [Value],
+				        "OrderDate", [@OrderDate],
+				        "ShipDate", [@OrderDate] + [@ShipLag],
+				        "ProductKey", [@ProductKey],
+				        "CustomerKey", [@CustomerKey],
+				        "RegionKey", [@RegionKey],
+				        "Quantity", [@Quantity],
+				        "Unit Price", [@UnitPrice],
+				        "Unit Cost", [@UnitCost],
+				        "Discount Pct", [@Discount],
+				        "Sales Amount", [@Quantity] * [@UnitPrice] * (1 - [@Discount]),
+				        "Total Cost", [@Quantity] * [@UnitCost]
+				    )
+

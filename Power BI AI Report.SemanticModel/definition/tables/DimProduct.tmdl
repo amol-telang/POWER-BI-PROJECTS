@@ -1,0 +1,68 @@
+/// Product dimension
+table DimProduct
+	lineageTag: bb15bf15-296b-4d8c-bf5d-ef33105101a7
+
+	column ProductKey
+		isHidden
+		lineageTag: d6635291-5247-44ff-890a-73b55a7fa505
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ProductKey]
+
+	column 'Product Name'
+		lineageTag: 85b7b73f-9e2c-4a0c-b77f-45256d9b7fbc
+		isNameInferred
+		sourceColumn: [Product Name]
+
+	column Category
+		lineageTag: f9accc57-296f-48a4-8caf-03bc0e0040cf
+		isNameInferred
+		sourceColumn: [Category]
+
+	column Subcategory
+		lineageTag: 64a0358e-0392-4f25-b877-1909ae674601
+		isNameInferred
+		sourceColumn: [Subcategory]
+
+	column 'Unit Price'
+		isHidden
+		formatString: #,0.00
+		lineageTag: 4b8aa793-60d1-4d7d-b406-d7aacfbd1e27
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Unit Price]
+
+	column 'Unit Cost'
+		isHidden
+		formatString: #,0.00
+		lineageTag: 94003747-974f-4e47-bf6d-da21ec24bf99
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Unit Cost]
+
+	partition DimProduct = calculated
+		mode: import
+		source =
+				DATATABLE(
+				    "ProductKey", INTEGER,
+				    "Product Name", STRING,
+				    "Category", STRING,
+				    "Subcategory", STRING,
+				    "Unit Price", CURRENCY,
+				    "Unit Cost", CURRENCY,
+				    {
+				        {1, "Laptop Pro 15", "Electronics", "Computers", 1200, 840},
+				        {2, "Smartphone X", "Electronics", "Mobile", 800, 520},
+				        {3, "Wireless Headphones", "Electronics", "Audio", 150, 80},
+				        {4, "Smartwatch S", "Electronics", "Wearables", 250, 140},
+				        {5, "Ergonomic Office Chair", "Furniture", "Seating", 320, 190},
+				        {6, "Standing Desk", "Furniture", "Desks", 550, 340},
+				        {7, "Oak Bookshelf", "Furniture", "Storage", 210, 120},
+				        {8, "LED Desk Lamp", "Furniture", "Lighting", 45, 22},
+				        {9, "Travel Backpack", "Accessories", "Bags", 90, 45},
+				        {10, "Steel Water Bottle", "Accessories", "Drinkware", 25, 10},
+				        {11, "Notebook Set", "Accessories", "Stationery", 18, 7},
+				        {12, "Mechanical Keyboard", "Accessories", "Peripherals", 130, 70}
+				    }
+				)
+

@@ -1,0 +1,52 @@
+/// Customer dimension
+table DimCustomer
+	lineageTag: 76e1fbf5-343b-4b19-8de1-7303c97aa1b1
+
+	column CustomerKey
+		isHidden
+		lineageTag: a992b9d7-63de-46bd-8535-c5972d9a053b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CustomerKey]
+
+	column 'Customer Name'
+		lineageTag: 8f7dd7fc-ec0c-4c5d-822c-598424bdca6e
+		isNameInferred
+		sourceColumn: [Customer Name]
+
+	column Segment
+		lineageTag: 0d0009e0-c987-4fc4-a5ee-5aa03a2dbc2d
+		isNameInferred
+		sourceColumn: [Segment]
+
+	partition DimCustomer = calculated
+		mode: import
+		source =
+				DATATABLE(
+				    "CustomerKey", INTEGER,
+				    "Customer Name", STRING,
+				    "Segment", STRING,
+				    {
+				        {1, "Northwind Traders", "Corporate"},
+				        {2, "Contoso Ltd", "Corporate"},
+				        {3, "Fabrikam Inc", "Corporate"},
+				        {4, "Adventure Works", "Corporate"},
+				        {5, "Tailspin Toys", "Small Business"},
+				        {6, "Wingtip Supplies", "Small Business"},
+				        {7, "Litware Studio", "Small Business"},
+				        {8, "Proseware Design", "Small Business"},
+				        {9, "Blue Yonder Cafe", "Small Business"},
+				        {10, "Alice Johnson", "Consumer"},
+				        {11, "Brian Smith", "Consumer"},
+				        {12, "Carla Gomez", "Consumer"},
+				        {13, "David Lee", "Consumer"},
+				        {14, "Emma Wilson", "Consumer"},
+				        {15, "Farhan Khan", "Consumer"},
+				        {16, "Grace Chen", "Consumer"},
+				        {17, "Hiro Tanaka", "Consumer"},
+				        {18, "Isabel Rossi", "Consumer"},
+				        {19, "Jonas Weber", "Consumer"},
+				        {20, "Kavya Nair", "Consumer"}
+				    }
+				)
+

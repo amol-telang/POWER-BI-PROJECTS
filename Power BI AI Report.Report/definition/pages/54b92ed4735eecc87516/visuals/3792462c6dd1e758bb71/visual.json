@@ -1,0 +1,163 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "3792462c6dd1e758bb71",
+  "position": {
+    "x": 10.534979423868313,
+    "y": 210.69958847736623,
+    "z": 1000,
+    "height": 509.19067215363509,
+    "width": 1269.4650205761316,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "columnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimDate"
+                    }
+                  },
+                  "Property": "Date"
+                }
+              },
+              "queryRef": "DimDate.Date",
+              "nativeQueryRef": "Date",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "Sales MTD"
+                }
+              },
+              "queryRef": "FactSales.Sales MTD",
+              "nativeQueryRef": "Sales MTD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "Sales QTD"
+                }
+              },
+              "queryRef": "FactSales.Sales QTD",
+              "nativeQueryRef": "Sales QTD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactSales"
+                    }
+                  },
+                  "Property": "Sales YTD"
+                }
+              },
+              "queryRef": "FactSales.Sales YTD",
+              "nativeQueryRef": "Sales YTD"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "DimDate"
+                  }
+                },
+                "Property": "Date"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "b64f3e372ef19f1cd03b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DimDate"
+              }
+            },
+            "Property": "Date"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "8d006cb6bd3996c720eb",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "FactSales"
+              }
+            },
+            "Property": "Sales MTD"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "d5cf2f137407c42ba51e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "FactSales"
+              }
+            },
+            "Property": "Sales QTD"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "9e67702691f077ed3a9a",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "FactSales"
+              }
+            },
+            "Property": "Sales YTD"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}
